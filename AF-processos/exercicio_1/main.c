@@ -17,20 +17,20 @@
 
 // Obs:
 // - pai deve esperar pelos filhos antes de terminar!
+
 #define CHILDREN 2
 
-void child()
-{
+void child(	) {
     printf("Processo filho %d criado\n", getpid());
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     pid_t parent_pid = getpid();
     pid_t child_pid;
 
     for (int i = 0; i < CHILDREN; i++)
     {
+	fflush(stdin);	// LIMPAR O BUFFER DA FUNÇÃO PRINTF
         child_pid = fork();
 
         if (child_pid == 0)

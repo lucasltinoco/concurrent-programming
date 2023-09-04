@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
+
 //                          (principal)
 //                               |
 //              +----------------+--------------+
@@ -21,6 +22,7 @@
 // Obs:
 // - netos devem esperar 5 segundos antes de imprmir a mensagem de finalizado (e terminar)
 // - pais devem esperar pelos seu descendentes diretos antes de terminar
+
 #define CHILDREN 2
 #define GRANDCHILDREN 6
 
@@ -37,12 +39,13 @@ void child()
     pid_t child_pid = getpid();
     printf("Processo %d, filho de %d\n", getpid(), getppid());
 
-    for (int i = 0; i < GRANDCHILDREN / 2; i++)
+    for (int i = 0; i < GRANDCHILDREN / CHILDREN; i++)
     {
         grandchild_pid = fork();
 
         if (grandchild_pid == 0)
         {
+	    	fflush(stdin);
             grandchild();
             break;
         }
@@ -66,13 +69,13 @@ int main(int argc, char **argv)
 
         if (child_pid == 0)
         {
+    		fflush(stdin);
             child();
             break;
         }
     }
 
-    while (wait(NULL) >= 0)
-        ;
+    while (wait(NULL) >= 0);
 
     if (getpid() == parent_pid)
         printf("Processo principal %d finalizado\n", getpid());
