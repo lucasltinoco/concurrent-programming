@@ -20,13 +20,8 @@ void transferir_unsafe(conta_t* origem, conta_t* destino, double valor) {
     printf("Transferindo %.2f da conta %d para %d\n", valor, origem->id, destino->id);
     fflush(stdout);
 
-    pthread_mutex_lock(&origem->mutex);
     origem->saldo -= valor;
-    pthread_mutex_unlock(&origem->mutex);
-    
-    pthread_mutex_lock(&destino->mutex);
     destino->saldo += valor;
-    pthread_mutex_unlock(&destino->mutex);
     
     struct timespec ts = {0, 200*MILLION};
     nanosleep(&ts, NULL);
