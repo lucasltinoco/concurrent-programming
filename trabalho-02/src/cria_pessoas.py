@@ -19,5 +19,3 @@ class CriaPessoas(Thread):
 
         for thread in threads_de_pessoas:
             thread.join()
-            
-        print(vg.fila.qsize())
