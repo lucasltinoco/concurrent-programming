@@ -14,4 +14,4 @@ class Entrada:
         self.PERMANENCIA = int(argv[3])
         self.MAX_INTERVALO = int(argv[4])
         self.SEMENTE = int(argv[5])
-        self.UNID_TEMPO = int(argv[6])
+        self.UNID_TEMPO = int(argv[6]) / 1000

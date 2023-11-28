@@ -1,7 +1,7 @@
 from threading import Thread
 
 
-class Ixfera(Thread):
+class Atracao(Thread):
     def __init__(self):
         super().__init__()
 

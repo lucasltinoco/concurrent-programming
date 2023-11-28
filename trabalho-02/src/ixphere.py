@@ -11,11 +11,9 @@ def main():
 
     vg.iniciar_variaveis_globais()
 
-    CriaPessoas(entrada).start()
-
-    print(f"pessoas_na_fila {vg.fila.qsize()}")
-
     print("[Ixfera] Simulacao iniciada.")
+
+    CriaPessoas(entrada).start()
 
 
 if __name__ == "__main__":
