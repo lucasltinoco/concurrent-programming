@@ -1,6 +1,6 @@
 from threading import Thread
 import variaveis_globais as vg
-from time import sleep
+from time import sleep, time
 from datetime import datetime
 
 
@@ -41,6 +41,7 @@ class Ixfera(Thread):
         if not vg.fila.empty():
             with vg.mutex_fila:
                 pessoa = vg.fila.get()
+                pessoa.fim_espera = time()
             with vg.mutex_pessoas_na_ixfera:
                 vg.pessoas_na_ixfera.put(pessoa)
             vg.pessoas_atendidas.append(pessoa)
@@ -71,6 +72,7 @@ class Ixfera(Thread):
                 )
             with vg.mutex_fila:
                 pessoa = vg.fila.get()
+                pessoa.fim_espera = time()
             with vg.mutex_pessoas_na_ixfera:
                 vg.pessoas_na_ixfera.put(pessoa)
             vg.pessoas_atendidas.append(pessoa)
