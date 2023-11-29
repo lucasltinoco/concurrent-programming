@@ -37,6 +37,16 @@ def main():
     cria_pessoas.join()
     ixfera.join()
     print(f"{datetime.now().isoformat().split('T')[1]} [Ixfera] Simulacao finalizada.")
+    
+    print(vg.pessoas_atendidas)
+    print("\n")
+    print("Tempo medio de espera")
+    print(f"Faixa A: ")
+    print(f"Faixa B: ")
+    print(f"Faixa C: ")
+    
+    print("\n")
+    print(f"Taxa de ocupacao: ")
 
 
 if __name__ == "__main__":

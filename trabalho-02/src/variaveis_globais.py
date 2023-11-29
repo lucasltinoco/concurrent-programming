@@ -3,7 +3,7 @@ import threading
 
 
 def iniciar_variaveis_globais():
-    global fila, mutex_fila, ixfera_sem, pessoas_na_ixfera, mutex_pessoas_na_ixfera, entrada_na_atracao_sem, espera_experiencia_sem, espera_liberar_vaga_sem
+    global fila, mutex_fila, ixfera_sem, pessoas_na_ixfera, mutex_pessoas_na_ixfera, entrada_na_atracao_sem, espera_experiencia_sem, espera_liberar_vaga_sem, pessoas_atendidas
 
     fila = queue.Queue()
 
@@ -18,5 +18,7 @@ def iniciar_variaveis_globais():
     entrada_na_atracao_sem = threading.Semaphore(0)
 
     espera_experiencia_sem = threading.Semaphore(0)
-    
+
     espera_liberar_vaga_sem = threading.Semaphore(0)
+    
+    pessoas_atendidas = []

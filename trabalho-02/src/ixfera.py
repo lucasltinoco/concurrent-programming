@@ -9,11 +9,10 @@ class Ixfera(Thread):
         super().__init__()
         self.experiencia = None
         self.entrada = entrada
-        self.pessoas_atendidas = 0
         self.atracao_ativa = False
 
     def run(self):
-        while self.pessoas_atendidas < self.entrada.N_PESSOAS:
+        while len(vg.pessoas_atendidas) < self.entrada.N_PESSOAS:
             if (
                 vg.pessoas_na_ixfera.empty()
                 and vg.fila.empty()
@@ -44,7 +43,7 @@ class Ixfera(Thread):
                 pessoa = vg.fila.get()
             with vg.mutex_pessoas_na_ixfera:
                 vg.pessoas_na_ixfera.put(pessoa)
-            self.pessoas_atendidas += 1
+            vg.pessoas_atendidas.append(pessoa)
             self.experiencia = pessoa.faixa_etaria
             self.atracao_ativa = True
             print(
@@ -74,7 +73,7 @@ class Ixfera(Thread):
                 pessoa = vg.fila.get()
             with vg.mutex_pessoas_na_ixfera:
                 vg.pessoas_na_ixfera.put(pessoa)
-            self.pessoas_atendidas += 1
+            vg.pessoas_atendidas.append(pessoa)
             vg.entrada_na_atracao_sem.release()
 
     def debug_fila(self):
