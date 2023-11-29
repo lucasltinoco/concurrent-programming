@@ -20,5 +20,5 @@ def iniciar_variaveis_globais():
     espera_experiencia_sem = threading.Semaphore(0)
 
     espera_liberar_vaga_sem = threading.Semaphore(0)
-    
+
     pessoas_atendidas = []
