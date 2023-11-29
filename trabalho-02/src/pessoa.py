@@ -2,6 +2,7 @@ from threading import Thread
 from time import sleep
 import random
 import variaveis_globais as vg
+from datetime import datetime
 
 
 class Pessoa(Thread):
@@ -9,19 +10,34 @@ class Pessoa(Thread):
         super().__init__()
         self.faixa_etaria = faixa_etaria
         self.id = id
-        self.entrada = entrada # Objeto da classe Entrada
+        self.entrada = entrada  # Objeto da classe Entrada
 
     def run(self):
-        tempo_ate_entrar = random.randint(1, self.entrada.MAX_INTERVALO * self.entrada.UNID_TEMPO)
-        sleep(tempo_ate_entrar)
+        """Lógica para entrar na fila e exibir na tela"""
+        with vg.mutex_fila:
+            vg.fila.put(self)
 
-        """ Lógica para entrar na fila e exibir na tela """
-        vg.mutex_fila.acquire()
-        vg.fila.put(self)
-        print(f"[Pessoa {self.id} / {self.faixa_etaria}] Aguardando na fila.")
-        vg.ixfera_sem.release() # Liberando o semaforo da ixfera
-        vg.mutex_fila.release() # Liberando o mutex da queue
-        
-        # print(
-        #     f"[Pessoa {self.id} / {self.faixa_etaria}] Entrou na Ixfera (quantidade = 0)."
-        # )  # {}).")
+        print(
+            f"{datetime.now().isoformat().split('T')[1]} [Pessoa {self.id} / {self.faixa_etaria}] Aguardando na fila."
+        )
+        if vg.pessoas_na_ixfera.empty() and vg.fila.qsize() == 1:
+            vg.ixfera_sem.release()
+
+        vg.entrada_na_atracao_sem.acquire()
+        print(
+            f"{datetime.now().isoformat().split('T')[1]} [Pessoa {self.id} / {self.faixa_etaria}] Entrou na Ixfera (quantidade = {vg.pessoas_na_ixfera.qsize()})."
+        )
+
+        sleep(self.entrada.PERMANENCIA * self.entrada.UNID_TEMPO)
+
+        with vg.mutex_pessoas_na_ixfera:
+            vg.pessoas_na_ixfera.get()
+        print(
+            f"{datetime.now().isoformat().split('T')[1]} [Pessoa {self.id} / {self.faixa_etaria}] Saiu da Ixfera (quantidade = {vg.pessoas_na_ixfera.qsize()})."
+        )
+
+        if vg.pessoas_na_ixfera.qsize() == self.entrada.N_VAGAS - 1:
+            vg.espera_liberar_vaga_sem.release()
+
+        if vg.pessoas_na_ixfera.qsize() == 0:
+            vg.espera_experiencia_sem.release()

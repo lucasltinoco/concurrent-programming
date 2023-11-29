@@ -3,6 +3,7 @@ from entrada import Entrada
 from cria_pessoas import CriaPessoas
 import variaveis_globais as vg
 from ixfera import Ixfera
+from datetime import datetime
 
 
 def debug_entrada(entrada):
@@ -25,9 +26,17 @@ def main():
 
     vg.iniciar_variaveis_globais()
 
-    Ixfera(entrada).start()
+    ixfera = Ixfera(entrada)
 
-    CriaPessoas(entrada).start()
+    print(f"{datetime.now().isoformat().split('T')[1]} [Ixfera] Simulacao iniciada.")
+    ixfera.start()
+
+    cria_pessoas = CriaPessoas(entrada)
+    cria_pessoas.start()
+
+    cria_pessoas.join()
+    ixfera.join()
+    print(f"{datetime.now().isoformat().split('T')[1]} [Ixfera] Simulacao finalizada.")
 
 
 if __name__ == "__main__":
