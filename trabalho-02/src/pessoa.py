@@ -6,6 +6,8 @@ from datetime import datetime
 
 class Pessoa(Thread):
     def __init__(self, faixa_etaria, id, entrada):
+        """
+        """
         super().__init__()
         self.faixa_etaria = faixa_etaria
         self.id = id
@@ -14,7 +16,7 @@ class Pessoa(Thread):
         self.fim_espera = None
 
     def run(self):
-        """Lógica para entrar na fila e exibir na tela"""
+        """ Lógica para entrar na fila e exibir na tela """
         with vg.mutex_fila:
             vg.fila.put(self)
             self.inicio_espera = time()
