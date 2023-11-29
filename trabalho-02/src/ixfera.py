@@ -55,8 +55,7 @@ class Ixfera(Thread):
     def preencher_vagas(self):
         #     """ """
         if not vg.fila.empty():
-            with vg.mutex_fila:
-                pessoa = vg.fila.get()
+            pessoa = vg.fila.queue[0]
             if (
                 self.experiencia == pessoa.faixa_etaria
                 and vg.pessoas_na_ixfera.qsize() == self.entrada.N_VAGAS
@@ -64,13 +63,15 @@ class Ixfera(Thread):
                 vg.espera_liberar_vaga_sem.acquire()
             elif (
                 pessoa.faixa_etaria != self.experiencia
-                and vg.pessoas_na_ixfera.qsize() > 0
+                and not vg.pessoas_na_ixfera.empty()
             ):
                 vg.espera_experiencia_sem.acquire()
                 self.experiencia = pessoa.faixa_etaria
                 print(
                     f"{datetime.now().isoformat().split('T')[1]} [Ixfera] Iniciando a experiencia {pessoa.faixa_etaria}."
                 )
+            with vg.mutex_fila:
+                pessoa = vg.fila.get()
             with vg.mutex_pessoas_na_ixfera:
                 vg.pessoas_na_ixfera.put(pessoa)
             self.pessoas_atendidas += 1
